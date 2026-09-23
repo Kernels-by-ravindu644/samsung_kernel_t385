@@ -34,8 +34,8 @@ build_kernel(){
     # cleanup
     # make "${BUILD_OPTIONS[@]}" clean && make "${BUILD_OPTIONS[@]}" mrproper
     
-    # make default configuration.
-    make "${BUILD_OPTIONS[@]}" gta2slte_sea_open_defconfig
+    # stock SM-T385L configuration (extracted from the OEM boot.img via extract-ikconfig)
+    make "${BUILD_OPTIONS[@]}" t385l_defconfig
 
     # menuconfig
     make "${BUILD_OPTIONS[@]}" menuconfig
