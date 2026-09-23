@@ -504,7 +504,10 @@ endif
 ifeq ($(KBUILD_EXTMOD),)
         ifneq ($(filter config %config,$(MAKECMDGOALS)),)
                 config-targets := 1
-                ifneq ($(filter-out config %config,$(MAKECMDGOALS)),)
+                # Multiple config goals (e.g. "make foo_defconfig bar.config")
+                # must run one by one, in command-line order, or -j races
+                # them and the fragment merge is overwritten by the defconfig.
+                ifneq ($(words $(MAKECMDGOALS)),1)
                         mixed-targets := 1
                 endif
         endif
