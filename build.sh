@@ -13,13 +13,22 @@ cd "${KERNEL_ROOT}"
 # init submodules
 git submodule update --init --recursive || true
 
+# generate localversion
+BUILD_VERSION=$(git log -1 --pretty=%h 2>/dev/null)
+if [ -z "$BUILD_VERSION" ]; then
+    export BUILD_VERSION="dev"
+fi
+cat << EOF > "${KERNEL_ROOT}/arch/arm/configs/version.config"
+CONFIG_LOCALVERSION_AUTO=n
+CONFIG_LOCALVERSION="-ravindu644-${BUILD_VERSION}"
+EOF
+
 # create build folders
 mkdir -p out dist
 
 # export toolchain path and core variables
 export PATH="${HOME}/toolchains/arm-linux-androideabi-4.9/bin:${PATH}"
 export KBUILD_BUILD_USER="@ravindu644"
-BUILD_VERSION="v1.0"
 MAGISKBOOT="${KERNEL_ROOT}/prebuilts/magiskboot"
 STOCK_BOOT="${KERNEL_ROOT}/prebuilts/boot.img"
 
@@ -38,7 +47,7 @@ build_kernel(){
     # make "${BUILD_OPTIONS[@]}" clean && make "${BUILD_OPTIONS[@]}" mrproper
     
     # stock SM-T385L configuration (extracted from the OEM boot.img via extract-ikconfig)
-    make "${BUILD_OPTIONS[@]}" t385l_defconfig custom.config
+    make "${BUILD_OPTIONS[@]}" t385l_defconfig version.config custom.config
 
     # menuconfig
     make "${BUILD_OPTIONS[@]}" menuconfig
