@@ -70,4 +70,15 @@ struct itimerval {
  */
 #define TIMER_ABSTIME			0x01
 
+/* Fixed-size, y2038-safe layouts (Linux 5.1 uapi) */
+struct __kernel_timespec {
+	__kernel_time64_t	tv_sec;			/* seconds */
+	long long		tv_nsec;		/* nanoseconds */
+};
+
+struct __kernel_sock_timeval {
+	__s64 tv_sec;
+	__s64 tv_usec;
+};
+
 #endif /* _UAPI_LINUX_TIME_H */

@@ -91,4 +91,15 @@
 #define SO_SET_DNS_PID		58
 /* END_OF_KNOX_NPA */
 
+/* Backported from Linux 5.1: y2038-safe timestamp options. Timestamps are
+ * delivered as struct __kernel_sock_timeval / struct __kernel_timespec /
+ * struct scm_timestamping64 instead of the native-long variants. */
+#define SO_TIMESTAMP_NEW	63
+#define SO_TIMESTAMPNS_NEW	64
+#define SO_TIMESTAMPING_NEW	65
+
+#define SCM_TIMESTAMP_NEW	SO_TIMESTAMP_NEW
+#define SCM_TIMESTAMPNS_NEW	SO_TIMESTAMPNS_NEW
+#define SCM_TIMESTAMPING_NEW	SO_TIMESTAMPING_NEW
+
 #endif /* __ASM_GENERIC_SOCKET_H */
