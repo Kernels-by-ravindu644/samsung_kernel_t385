@@ -47,7 +47,7 @@ build_kernel(){
     # make "${BUILD_OPTIONS[@]}" clean && make "${BUILD_OPTIONS[@]}" mrproper
     
     # stock SM-T385L configuration (extracted from the OEM boot.img via extract-ikconfig)
-    make "${BUILD_OPTIONS[@]}" t385l_defconfig version.config custom.config
+    make "${BUILD_OPTIONS[@]}" t385l_defconfig version.config custom.config droidspaces.config
 
     # menuconfig
     make "${BUILD_OPTIONS[@]}" menuconfig
