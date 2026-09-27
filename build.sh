@@ -32,6 +32,16 @@ export KBUILD_BUILD_USER="@ravindu644"
 MAGISKBOOT="${KERNEL_ROOT}/prebuilts/magiskboot"
 STOCK_BOOT="${KERNEL_ROOT}/prebuilts/boot.img"
 
+# download the toolchain if it isn't there yet
+download_toolchains(){
+    local base="https://github.com/ravindu644/Android-Kernel-Tutorials/releases/download/toolchains"
+    if [ ! -x "${HOME}/toolchains/arm-linux-androideabi-4.9/bin/arm-linux-androideabi-gcc" ]; then
+        echo "[INFO]: downloading arm-linux-androideabi-4.9..."
+        mkdir -p "${HOME}/toolchains"
+        wget -q --show-progress -O- "${base}/arm-linux-androideabi-4.9.tar.xz" | tar -xJ -C "${HOME}/toolchains"
+    fi
+}
+
 # build options for the kernel
 BUILD_OPTIONS=(
     -C "${KERNEL_ROOT}"
@@ -50,7 +60,7 @@ build_kernel(){
     make "${BUILD_OPTIONS[@]}" t385l_defconfig version.config custom.config droidspaces.config
 
     # menuconfig
-    make "${BUILD_OPTIONS[@]}" menuconfig
+    [ -t 0 ] && make "${BUILD_OPTIONS[@]}" menuconfig
 
     # Build the kernel
     make "${BUILD_OPTIONS[@]}" || exit 1
@@ -79,6 +89,7 @@ build_tar(){
     cd "${KERNEL_ROOT}"
 }
 
+download_toolchains
 build_kernel
 build_boot
 build_tar
